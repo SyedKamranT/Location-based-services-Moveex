@@ -26,6 +26,11 @@
   font-style: normal;
 }
 
+.marcellus-extrabold {
+  font-family: "Marcellus", serif;
+  font-weight: 550;
+  font-style: normal;
+}
 
 .poppins-thin {
   font-family: "Poppins", sans-serif;
