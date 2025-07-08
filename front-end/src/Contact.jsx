@@ -10,7 +10,7 @@ const Contact = () => {
       </div>
 
       <div className="text-center mt-10">
-        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-4">Get In Touch</h1>
+        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-6">Get In Touch</h1>
       </div>
 
       <div className="flex flex-col lg:flex-row justify-center items-start gap-10 mt-10 px-10 lg:px-32">

@@ -122,7 +122,7 @@ const Home = () => {
               <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/">Home page </NavLink> </li>
               <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/aboutus">About us </NavLink> </li>
               <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/contact">Contact us </NavLink> </li>
-              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/courierer">Become a courierer</NavLink> </li>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/courier">Become a courierer</NavLink> </li>
 
             </ul>
           </div>

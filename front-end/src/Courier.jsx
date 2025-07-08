@@ -1,5 +1,9 @@
 import React from 'react';
 import Navbar from './components/Navbar';
+import { NavLink } from 'react-router-dom';
+import { FaFacebook } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const Courier = () => {
   return (
@@ -11,7 +15,7 @@ const Courier = () => {
 
       {/* Title */}
       <div className="text-center mt-10">
-        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-4">
+        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-6">
           Become a Courier
         </h1>
         <p className="mt-3 text-gray-600">Join our team of reliable and fast delivery partners</p>
@@ -61,51 +65,57 @@ const Courier = () => {
         </form>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#133BB7] mt-20 text-white py-10 px-10 lg:px-32">
-        <div className="flex flex-col lg:flex-row justify-between gap-10">
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Stay up to date with Us</h3>
-            <p className="text-sm mb-4">Get in touch,</p>
-            <div className="flex border border-white rounded-md overflow-hidden w-fit">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="p-2 outline-none text-black"
-              />
-              <button className="bg-white text-[#133BB7] px-4 py-2 font-semibold">Join now</button>
+{/* footer */}
+      <div className=' bg-[#133BB7] w-full h-[480px] '>
+
+        <div className=' w-[80%] h-full mx-auto py-[100px] text-white flex gap-[100px] justify-between items-start'>
+          <div className='flex flex-col h-full justify-between text-white'>
+            <h2 className=' poppins-bold text-[36px]'>Stay up to date with Us</h2>
+            <p className=' poppins-regular text-[18px]'>Get in touch,</p>
+            <div className='flex justify-between bg-transparent border-[2px] border-white w-[488px] py-[10px] pl-10 pr-[12px] rounded-[8px]   '>
+              <input className='outline-none poppins-regular text-[18px]' type="text" name="" id="" placeholder='Enter your email address' />
+              <button className='bg-white w-[171px] h-[54px] text-[#133BB7] rounded-[4px] poppins-medium text-[18px] cursor-pointer hover:bg-[#2352e0] hover:text-white hover: transition-all ease-in delay-25 '>Join Now </button>
             </div>
           </div>
-
           <div>
-            <h4 className="font-bold mb-2">Menu</h4>
-            <ul className="space-y-1 text-sm">
-              <li>Home Page</li>
-              <li>About Us</li>
-              <li>Services</li>
-              <li>Contact Us</li>
+
+            <ul className=' flex flex-col gap-[18px]'>
+              <h1 className=' poppins-semibold text-[24px]'>Menu</h1>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/">Home page </NavLink> </li>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/aboutus">About us </NavLink> </li>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/contact">Contact us </NavLink> </li>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/courier">Become a courierer</NavLink> </li>
+
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-2">Register</h4>
-            <ul className="space-y-1 text-sm">
-              <li>Login Page</li>
-              <li>Signup Page</li>
+
+            <ul className='flex-col flex gap-[18px]'>
+
+              <h1 className=' poppins-semibold text-[24px]'>Register</h1>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/login">Login Page </NavLink> </li>
+              <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/signup">Signup Page </NavLink> </li>
             </ul>
           </div>
-
-          <div className="flex items-center gap-4">
-            <i className="fab fa-facebook-f text-xl"></i>
-            <i className="fab fa-linkedin-in text-xl"></i>
-            <i className="fab fa-twitter text-xl"></i>
+          <div className=' flex flex-col gap-10'>
+            <FaFacebook className=' w-[40px] h-[40px]' />
+            <FaLinkedin className=' w-[40px] h-[40px]' />
+            <FaXTwitter className=' w-[40px] h-[40px]' />
           </div>
+
         </div>
 
-        <div className="text-xs text-center mt-10">
-          © 2011 All Rights Reserved Moveex Pvt Ltd
+      </div>
+      <div className=' w-[80%] h-[45px] text-[#133BB7] mx-auto flex justify-between items-center '>
+        <p className='poppins-regular text-[14px]'>© 2011 All Rights Reserved Moveex Pvt Ltd</p>
+
+        <div className=' flex items-center flex-row gap-2 text-[#133BB7]'>
+          <NavLink className=" poppins-regular text-[14px] tracking-[0.5px]" to="/">Home page </NavLink> |
+          <NavLink className="poppins-regular text-[14px] tracking-[0.5px]" to="/contact">Contact</NavLink> |
+          <NavLink className=" poppins-regular text-[14px] tracking-[0.5px]" to="/">Privacy policy </NavLink>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
