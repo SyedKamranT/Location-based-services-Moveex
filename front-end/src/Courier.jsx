@@ -9,7 +9,7 @@ const Courier = () => {
   return (
     <div className="min-h-screen">
       {/* Top Navbar */}
-      <div className="bg-[#133BB7]">
+      <div className='bg-cover bg-no-repeat h-full pt-5 pb-5 bg-[#133BB7]'>
         <Navbar />
       </div>
 
@@ -22,7 +22,7 @@ const Courier = () => {
       </div>
 
       {/* Form Section */}
-      <div className="flex justify-center mt-10 px-6 lg:px-32">
+      <div className="flex justify-center mt-10 px-6 lg:px-32 p-5">
         <form className="w-full max-w-2xl bg-white shadow-lg p-8 rounded-md border border-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <input
