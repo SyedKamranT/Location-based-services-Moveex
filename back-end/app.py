@@ -4,6 +4,7 @@ from flask_cors import CORS
 from config import Config
 from extensions import mongo
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -18,7 +19,9 @@ def create_app():
 
     from routes.payments import payments_bp
     app.register_blueprint(payments_bp, url_prefix="/api/payments")
-
+    
+    from routes.courier import courier_bp
+    app.register_blueprint(courier_bp, url_prefix="/api/courier")
     return app
 
 # instantiate at import-time so there's only one App + one Mongo

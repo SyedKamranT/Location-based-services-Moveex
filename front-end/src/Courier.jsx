@@ -1,59 +1,79 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import { NavLink } from 'react-router-dom';
-import { FaFacebook } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+// src/components/Courier.jsx
+import React, { useState } from 'react'
+import axios from 'axios'
+import Navbar from './components/Navbar'
+import { FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
+import { NavLink } from 'react-router-dom'
 
 const Courier = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    company: "",
+    message: ""
+  })
+  const [status, setStatus] = useState("")
+
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      await axios.post("http://localhost:5000/api/courier/apply", form)
+      setStatus("Your application has been sent! We’ll be in touch soon.")
+      setForm({ name: "", email: "", phone: "", city: "", company: "", message: "" })
+    } catch (err) {
+      setStatus(err.response?.data?.error || "Something went wrong")
+    }
+  }
+
   return (
     <div className="min-h-screen">
-      {/* Top Navbar */}
-      <div className='bg-cover bg-no-repeat h-full pt-5 pb-5 bg-[#133BB7]'>
+      <div className="bg-[#133BB7] pt-5 pb-5">
         <Navbar />
       </div>
 
-      {/* Title */}
       <div className="text-center mt-10">
         <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-6">
           Become a Courier
         </h1>
-        <p className="mt-3 text-gray-600">Join our team of reliable and fast delivery partners</p>
+        <p className="mt-3 text-gray-600">
+          Join our team of reliable and fast delivery partners
+        </p>
       </div>
 
-      {/* Form Section */}
       <div className="flex justify-center mt-10 px-6 lg:px-32 p-5">
-        <form className="w-full max-w-2xl bg-white shadow-lg p-8 rounded-md border border-gray-200">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="p-3 border border-gray-300 rounded-md"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="p-3 border border-gray-300 rounded-md"
-              required
-            />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              className="p-3 border border-gray-300 rounded-md"
-              required
-            />
-            <input
-              type="text"
-              placeholder="City"
-              className="p-3 border border-gray-300 rounded-md"
-              required
-            />
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-2xl bg-white shadow-lg p-8 rounded-md border border-gray-200"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+            {["name","email","phone","city","company"].map(field => (
+              <input
+                key={field}
+                name={field}
+                type={field === "email" ? "email" : "text"}
+                placeholder={field === "company" ? "Company Name" : field.charAt(0).toUpperCase()+field.slice(1)}
+                className="p-3 border border-gray-300 rounded-md"
+                value={form[field]}
+                onChange={handleChange}
+                required={field !== "company"}
+              />
+            ))}
           </div>
 
           <textarea
+            name="message"
             placeholder="Why do you want to become a courier?"
             className="mt-6 w-full p-3 border border-gray-300 rounded-md h-32 resize-none"
+            value={form.message}
+            onChange={handleChange}
+            required
           />
 
           <button
@@ -62,6 +82,10 @@ const Courier = () => {
           >
             Submit Application
           </button>
+
+          {status && (
+            <p className="mt-4 text-center text-green-600">{status}</p>
+          )}
         </form>
       </div>
 
