@@ -22,6 +22,9 @@ def create_app():
     
     from routes.courier import courier_bp
     app.register_blueprint(courier_bp, url_prefix="/api/courier")
+    
+    from routes.contact import contact_bp
+    app.register_blueprint(contact_bp, url_prefix="/api/contact")
     return app
 
 # instantiate at import-time so there's only one App + one Mongo

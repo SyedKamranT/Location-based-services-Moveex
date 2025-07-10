@@ -1,50 +1,91 @@
-import React from 'react';
-import Navbar from './components/Navbar';
-import mapImg from './assets/map.jpg'; // Ensure this image matches the one in your design
-import { NavLink } from 'react-router-dom';
-import { FaFacebook } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+// src/components/Contact.jsx
+import React, { useState } from 'react'
+import Navbar from './components/Navbar'
+import mapImg from './assets/map.jpg'
+import axios from 'axios'
+import { NavLink } from 'react-router-dom'
+import { FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 
 const Contact = () => {
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState('')
+
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      await axios.post('http://localhost:5000/api/contact/send', form)
+      setStatus('Thank you! We’ve received your message.')
+      setForm({ name: '', email: '', message: '' })
+    } catch (err) {
+      setStatus(err.response?.data?.error || 'Submission failed')
+    }
+  }
+
   return (
     <div className="min-h-screen">
-           <div className='bg-cover bg-no-repeat h-full pt-5 pb-5 bg-[#133BB7]'>
+      <div className="bg-[#133BB7] pt-5 pb-5">
         <Navbar />
       </div>
 
       <div className="text-center mt-10">
-        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-6">Get In Touch</h1>
+        <h1 className="text-3xl font-semibold text-[#133BB7] underline underline-offset-6">
+          Get In Touch
+        </h1>
       </div>
 
       <div className="flex flex-col lg:flex-row justify-center items-start gap-10 mt-10 px-10 lg:px-32">
         {/* Left - Form */}
         <div className="w-full lg:w-1/2">
           <h2 className="text-lg font-medium mb-4">Leave us a message</h2>
-          <form className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
+              name="name"
               type="text"
               placeholder="Name"
               className="border border-gray-400 p-3 rounded-md"
+              value={form.name}
+              onChange={handleChange}
+              required
             />
             <input
+              name="email"
               type="email"
               placeholder="Email Address"
               className="border border-gray-400 p-3 rounded-md"
+              value={form.email}
+              onChange={handleChange}
+              required
             />
             <textarea
+              name="message"
               placeholder="Your Message"
               className="border border-gray-400 p-3 rounded-md h-40 resize-none"
+              value={form.message}
+              onChange={handleChange}
+              required
             />
-            <button className="bg-[#133BB7] text-white py-2 rounded-md hover:bg-[#0f2f92]">
+            <button
+              type="submit"
+              className="bg-[#133BB7] text-white py-2 rounded-md hover:bg-[#0f2f92]"
+            >
               Send
             </button>
           </form>
+          {status && <p className="mt-4 text-green-600">{status}</p>}
         </div>
 
         {/* Right - Map */}
         <div className="w-full lg:w-1/2 pb-20">
-          <img src={mapImg} alt="Map Location" className="h-[600px] rounded-md shadow-md " />
+          <img
+            src={mapImg}
+            alt="Map Location"
+            className="h-[600px] rounded-md shadow-md"
+          />
         </div>
       </div>
 
