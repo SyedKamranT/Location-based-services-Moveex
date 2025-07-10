@@ -1,73 +1,90 @@
-import React, { useState } from "react";
+// src/components/Signup.jsx
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import logo from '../assets/logoblue.png';
+import googleIcon from '../assets/car.svg';   // same Google logo
+import hero from '../assets/signuppng.png';    // your left-side image
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log("Signup data:", formData);
-    // Add API integration here
+    try {
+      await axios.post('http://localhost:5000/api/auth/signup', { email, password });
+      alert('Signup successful! Please log in.');
+      navigate('/login');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Signup failed');
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
-          Create an Account
-        </h2>
+    <div className="flex h-screen">
+      {/* Left image */}
+      <div className="w-[1600px]">
+        <img src={hero} alt="" className="w-full h-full object-cover"/>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
-            required
-          />
-
-          <button
-            type="submit"
-            className="w-full bg-blue-700 text-white font-semibold py-2 rounded hover:bg-blue-800"
-          >
-            Sign Up
-          </button>
-        </form>
-
-        <p className="text-sm text-center mt-4">
-          Already have an account?{" "}
-          <a href="/login" className="text-blue-700 font-medium hover:underline">
-            Log in
-          </a>
-        </p>
+      {/* Right form */}
+      <div className="w-1/2 flex items-center justify-center bg-white">
+        <div className="w-[400px]">
+          <img src={logo} alt="moveex" className="mx-auto mb-6"/>
+          <h2 className="text-2xl font-semibold mb-2">Sign up to Get Started.</h2>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-sm mb-1">Email</label>
+              <input
+                type="text"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Email or phone number"
+                className="w-full bg-gray-100 p-3 rounded focus:outline-none"
+                required
+              />
+            </div>
+            {/* Password */}
+            <div className="relative">
+              <label className="block text-sm mb-1">Password</label>
+              <input
+                type={showPass ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Enter password"
+                className="w-full bg-gray-100 p-3 rounded focus:outline-none"
+                required
+              />
+              <span
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-3 top-11 text-gray-500 cursor-pointer"
+              >
+                {showPass ? <AiOutlineEyeInvisible size={20}/> : <AiOutlineEye size={20}/>}
+              </span>
+            </div>
+            {/* Signup button */}
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+            >
+              Signup
+            </button>
+            
+          </form>
+          <p className="text-center text-sm mt-6">
+            Already have an account?{' '}
+            <NavLink to="/login" className="text-blue-600 hover:underline">
+              Log in now
+            </NavLink>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,15 @@ const BookDelivery = () => {
   const [pickup, setPickup] = useState({ address: '', phone: '', details: '' });
   const [drop, setDrop] = useState({ address: '', phone: '', details: '' });
   const [itemType, setItemType] = useState('');
-  const [paymentType, setPaymentType] = useState('Online');
+  const [paymentType] = useState('Online');
+
+  // determine whether required fields are filled
+  const isFormValid =
+    pickup.address.trim() &&
+    pickup.phone.trim() &&
+    drop.address.trim() &&
+    drop.phone.trim() &&
+    itemType.trim();
 
   const calculateTotal = (service, weight) => {
     const basePrices = { deliver: 130, endOfDay: 112, schedule: 125 };
@@ -23,30 +31,26 @@ const BookDelivery = () => {
   };
   const total = calculateTotal(serviceType, weight);
 
-  // Inject Razorpay payment-button script once
+  // inject or clear the Razorpay button when form validity changes
   useEffect(() => {
     const container = document.getElementById('razorpay-container');
     if (!container) return;
-
-    // clear any existing
     container.innerHTML = '';
 
-    const form = document.createElement('form');
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
-    script.setAttribute('data-payment_button_id', 'pl_QqYMbcda25Rs5R');
-    // after successful payment, redirect to our success route
-    script.setAttribute('data-redirect_url', `${window.location.origin}/success`);
-    script.async = true;
-
-    form.appendChild(script);
-    container.appendChild(form);
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // we rely on Razorpay button for payment → no manual submit needed
-  };
+    if (isFormValid) {
+      const form = document.createElement('form');
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+      script.setAttribute('data-payment_button_id', 'pl_QqYMbcda25Rs5R');
+      script.setAttribute(
+        'data-redirect_url',
+        `${window.location.origin}/success`
+      );
+      script.async = true;
+      form.appendChild(script);
+      container.appendChild(form);
+    }
+  }, [isFormValid]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -56,13 +60,13 @@ const BookDelivery = () => {
         style={{ backgroundImage: `url(${backgroundImg})` }}
       >
         <Navbar />
-        <div className=" pt-40 flex flex-col items-center justify-center text-center px-4">
+        <div className="pt-40 flex flex-col items-center justify-center text-center px-4">
           <h1 className="marcellus-bold text-[72px] text-white leading-snug">
             Book a Delivery with Moveex
           </h1>
           <p className="text-white mt-4 poppins-light max-w-2xl">
-            Reliable, efficient, and hassle-free deliveries with real-time tracking. We move
-            your packages swiftly and securely, every time.
+            Reliable, efficient, and hassle-free deliveries with real-time
+            tracking. We move your packages swiftly and securely, every time.
           </p>
         </div>
       </div>
@@ -74,10 +78,25 @@ const BookDelivery = () => {
         {/* Service Type Cards */}
         <div className="flex space-x-4 mb-8">
           {[
-            { key: 'deliver', label: 'Deliver Now', desc: '…deliver as soon as possible.', price: 130 },
-            { key: 'endOfDay', label: 'By End of Day', desc: '…Schedule before 2 PM…', price: 112 },
-            { key: 'schedule', label: 'Schedule', desc: '…arrive at a scheduled time.', price: 125 }
-          ].map(svc => (
+            {
+              key: 'deliver',
+              label: 'Deliver Now',
+              desc: '…deliver as soon as possible.',
+              price: 130,
+            },
+            {
+              key: 'endOfDay',
+              label: 'By End of Day',
+              desc: '…Schedule before 2 PM…',
+              price: 112,
+            },
+            {
+              key: 'schedule',
+              label: 'Schedule',
+              desc: '…arrive at a scheduled time.',
+              price: 125,
+            },
+          ].map((svc) => (
             <div
               key={svc.key}
               onClick={() => setServiceType(svc.key)}
@@ -96,7 +115,7 @@ const BookDelivery = () => {
         <div className="mb-6">
           <div className="font-medium mb-2">Weight</div>
           <div className="flex space-x-4">
-            {['1', '5', '10', '15', '20'].map(w => (
+            {['1', '5', '10', '15', '20'].map((w) => (
               <button
                 key={w}
                 onClick={() => setWeight(w)}
@@ -110,14 +129,16 @@ const BookDelivery = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6">
           {/* Pickup Address */}
           <fieldset className="border p-5 rounded">
             <legend className="poppins-semibold">Pick up Address</legend>
             <input
               type="text"
               value={pickup.address}
-              onChange={e => setPickup({ ...pickup, address: e.target.value })}
+              onChange={(e) =>
+                setPickup({ ...pickup, address: e.target.value })
+              }
               placeholder="Street name & Locality"
               className="w-full mb-2 p-3 border rounded"
               required
@@ -125,14 +146,18 @@ const BookDelivery = () => {
             <input
               type="text"
               value={pickup.phone}
-              onChange={e => setPickup({ ...pickup, phone: e.target.value })}
+              onChange={(e) =>
+                setPickup({ ...pickup, phone: e.target.value })
+              }
               placeholder="+91"
               className="w-full mb-2 p-3 border rounded"
               required
             />
             <textarea
               value={pickup.details}
-              onChange={e => setPickup({ ...pickup, details: e.target.value })}
+              onChange={(e) =>
+                setPickup({ ...pickup, details: e.target.value })
+              }
               placeholder="Flat number, floor, building, landmarks, etc."
               className="w-full mb-2 p-3 border rounded"
             />
@@ -144,7 +169,7 @@ const BookDelivery = () => {
             <input
               type="text"
               value={drop.address}
-              onChange={e => setDrop({ ...drop, address: e.target.value })}
+              onChange={(e) => setDrop({ ...drop, address: e.target.value })}
               placeholder="Street name & Locality"
               className="w-full mb-2 p-3 border rounded"
               required
@@ -152,14 +177,14 @@ const BookDelivery = () => {
             <input
               type="text"
               value={drop.phone}
-              onChange={e => setDrop({ ...drop, phone: e.target.value })}
+              onChange={(e) => setDrop({ ...drop, phone: e.target.value })}
               placeholder="+91"
               className="w-full mb-2 p-3 border rounded"
               required
             />
             <textarea
               value={drop.details}
-              onChange={e => setDrop({ ...drop, details: e.target.value })}
+              onChange={(e) => setDrop({ ...drop, details: e.target.value })}
               placeholder="Flat number, floor, building, landmarks, etc."
               className="w-full mb-2 p-3 border rounded"
             />
@@ -170,82 +195,54 @@ const BookDelivery = () => {
             <input
               type="text"
               value={itemType}
-              onChange={e => setItemType(e.target.value)}
+              onChange={(e) => setItemType(e.target.value)}
               placeholder="What are you sending?"
               className="w-full mb-2 p-2 border rounded"
             />
             <div className="flex space-x-2 text-blue-600">
-              {['Documents', 'Food', 'Cloth', 'Groceries', 'Flowers', 'Cake', 'Parcel'].map(t => (
+              {[
+                'Documents',
+                'Food',
+                'Cloth',
+                'Groceries',
+                'Flowers',
+                'Cake',
+                'Parcel',
+              ].map((t) => (
                 <button
                   key={t}
                   type="button"
                   onClick={() => setItemType(t)}
-                  className={`underline ${itemType === t ? 'font-semibold' : ''}`}
+                  className={`underline ${
+                    itemType === t ? 'font-semibold' : ''
+                  }`}
                 >
                   {t}
                 </button>
               ))}
             </div>
+            
+          </div>
+                    <div className="text-xl font-bold">
+            Total: ₹{total}
           </div>
 
-          {/* Payment Button (Razorpay) */}
-          <div id="razorpay-container" className="mt-6" />
-
+          {/* conditional Submit / Payment */}
+          {!isFormValid ? (
+            <button
+              type="button"
+              disabled
+              className="w-full py-3 border-1 border-black bg-gray-400 font-semibold text-gray-700 rounded cursor-not-allowed"
+            >
+              Complete all fields to continue
+            </button>
+          ) : (
+            <div id="razorpay-container" className="mt-6" />
+          )}
         </form>
       </div>
 
-      {/* footer */}
-            <div className=' bg-[#133BB7] w-full h-[480px] '>
-      
-              <div className=' w-[80%] h-full mx-auto py-[100px] text-white flex gap-[100px] justify-between items-start'>
-                <div className='flex flex-col h-full justify-between text-white'>
-                  <h2 className=' poppins-bold text-[36px]'>Stay up to date with Us</h2>
-                  <p className=' poppins-regular text-[18px]'>Get in touch,</p>
-                  <div className='flex justify-between bg-transparent border-[2px] border-white w-[488px] py-[10px] pl-10 pr-[12px] rounded-[8px]   '>
-                    <input className='outline-none poppins-regular text-[18px]' type="text" name="" id="" placeholder='Enter your email address' />
-                    <button className='bg-white w-[171px] h-[54px] text-[#133BB7] rounded-[4px] poppins-medium text-[18px] cursor-pointer hover:bg-[#2352e0] hover:text-white hover: transition-all ease-in delay-25 '>Join Now </button>
-                  </div>
-                </div>
-                <div>
-      
-                  <ul className=' flex flex-col gap-[18px]'>
-                    <h1 className=' poppins-semibold text-[24px]'>Menu</h1>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/">Home page </NavLink> </li>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/aboutus">About us </NavLink> </li>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/contact">Contact us </NavLink> </li>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/courier">Become a courierer</NavLink> </li>
-      
-                  </ul>
-                </div>
-      
-                <div>
-      
-                  <ul className='flex-col flex gap-[18px]'>
-      
-                    <h1 className=' poppins-semibold text-[24px]'>Register</h1>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/login">Login Page </NavLink> </li>
-                    <li><NavLink className="text-white/70 poppins-regular text-[20px] tracking-[0.5px]" to="/signup">Signup Page </NavLink> </li>
-                  </ul>
-                </div>
-                <div className=' flex flex-col gap-10'>
-                  <FaFacebook className=' w-[40px] h-[40px]' />
-                  <FaLinkedin className=' w-[40px] h-[40px]' />
-                  <FaXTwitter className=' w-[40px] h-[40px]' />
-                </div>
-      
-              </div>
-      
-            </div>
-            <div className=' w-[80%] h-[45px] text-[#133BB7] mx-auto flex justify-between items-center '>
-              <p className='poppins-regular text-[14px]'>© 2011 All Rights Reserved Moveex Pvt Ltd</p>
-      
-              <div className=' flex items-center flex-row gap-2 text-[#133BB7]'>
-                <NavLink className=" poppins-regular text-[14px] tracking-[0.5px]" to="/">Home page </NavLink> |
-                <NavLink className="poppins-regular text-[14px] tracking-[0.5px]" to="/contact">Contact</NavLink> |
-                <NavLink className=" poppins-regular text-[14px] tracking-[0.5px]" to="/">Privacy policy </NavLink>
-              </div>
-              </div>
-
+      {/* footer... */}
     </div>
   );
 };

@@ -1,52 +1,82 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+// src/Home.jsx
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import backgroundImg from './assets/backgroundImg.png'
 import worker from './assets/worker.png'
 import factoryimage from './assets/factory.png'
-import { CiSearch } from "react-icons/ci";
-
-
+import { CiSearch } from 'react-icons/ci'
 import twowheel from './assets/twowheel.png'
 import fourwheel from './assets/fourwheel.png'
 import twelvewheel from './assets/twelvewheel.png'
-
 import bikeicon from './assets/bike.svg'
 import caricon from './assets/car.svg'
 import truckicon from './assets/truck.svg'
-
 import manytrucks from './assets/trucktruck.png'
-
-import { FaFacebook } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
-
+import { FaFacebook, FaLinkedin } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 
 const Home = () => {
+  const navigate = useNavigate()
+  const [pin, setPin] = useState('')
+
+  const handleSearch = () => {
+    if (!pin.trim()) {
+      // optionally prompt to enter something
+      return
+    }
+    if (localStorage.getItem('token')) {
+      navigate('/bookdelivery')
+    } else {
+      alert('Please log in to continue.')
+      navigate('/login')
+    }
+  }
+
   return (
-    <div className=' h-full'>
-      <div className=' bg-cover bg-no-repeat h-full pt-5 ' style={{ backgroundImage: `url(${backgroundImg})` }}>
-        <div>  <Navbar /></div>
+    <div className="h-full">
+      <div
+        className="bg-cover bg-no-repeat h-full pt-5"
+        style={{ backgroundImage: `url(${backgroundImg})` }}
+      >
+        <Navbar />
 
         {/* main section */}
-        <div className='px-5 flex justify-between  mt-10 gap-[30px]  '>
+        <div className="px-5 flex justify-between mt-10 gap-[30px]">
           {/* left div */}
-          <div className='ml-20 w-1/2'>
-            <img className='  h-full' src={worker} alt="" />
+          <div className="ml-20 w-1/2">
+            <img className="h-full" src={worker} alt="" />
           </div>
           {/* right div */}
-          <div className=' w-1/2 mt-[84px]'>
-            <h1 className=' marcellus-bold  text-[96px] text-white leading-[122px] tracking-[0.25px] '>Moving Fast,<br /> Moving Smart</h1>
-            <p className=' text-white mt-5 w-[90%] poppins-light'>Reliable, efficient, and hassle-free deliveries with real-time tracking. We move your packages swiftly and securely, every time.</p>
-            <div className=' flex justify-between items-center bg-white rounded-[8px] mt-11 px-2 pl-5 w-[80%]  '>
-              <input className='w-[572px] h-[70px] outline-none ' type="text" name="" id="" placeholder='Enter city or pincode' />
-              <button className='cursor-pointer bg-[#0F1521] text-white w-[40%] flex justify-center py-4.5 gap-2 rounded-[6px] hover:bg-[#1d1d1d] '><span className='poppins-medium text-[14px]  tracking-[1px]'>Search</span> <CiSearch className='poppins-medium text-[20px] font-extrabold' /> </button>
+          <div className="w-1/2 mt-[84px]">
+            <h1 className="marcellus-bold text-[96px] text-white leading-[122px] tracking-[0.25px]">
+              Moving Fast,
+              <br /> Moving Smart
+            </h1>
+            <p className="text-white mt-5 w-[90%] poppins-light">
+              Reliable, efficient, and hassle-free deliveries with real-time
+              tracking. We move your packages swiftly and securely, every time.
+            </p>
+            <div className="flex justify-between items-center bg-white rounded-[8px] mt-11 px-2 pl-5 w-[80%]">
+              <input
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                className="w-[572px] h-[70px] outline-none"
+                type="text"
+                placeholder="Enter city or pincode"
+              />
+              <button
+                onClick={handleSearch}
+                className="cursor-pointer bg-[#0F1521] text-white w-[40%] flex justify-center py-4.5 gap-2 rounded-[6px] hover:bg-[#1d1d1d]"
+              >
+                <span className="poppins-medium text-[14px] tracking-[1px]">
+                  Search
+                </span>
+                <CiSearch className="poppins-medium text-[20px] font-extrabold" />
+              </button>
             </div>
           </div>
-
         </div>
-
-
       </div>
       {/* white section */}
       <div className=' w-[80%] mx-auto bg-[#133BB7]/10 shadow-xl h-[599px]  my-[100px] rounded-[16px] flex justify-between'>
